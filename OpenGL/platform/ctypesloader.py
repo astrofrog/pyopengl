@@ -76,7 +76,10 @@ def _loadLibraryWindows(dllType, name, mode):
     """
     fullName = None
     try:
-        fullName = util.find_library( name )
+        if name in ["OpenGL", "GLUT"] and sys.platform == 'darwin' and int(os.uname()[2].split('.')[0]) > 19:
+             fullName = "/System/Library/Frameworks/" + name  + ".framework/" + name
+        else:
+             fullName = util.find_library( name )
         if fullName is not None:
             name = fullName
         elif os.path.isfile( os.path.join( DLL_DIRECTORY, name + '.dll' )):
